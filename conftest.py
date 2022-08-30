@@ -1,6 +1,7 @@
 import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.firefox.options import Options
 
 
 def pytest_addoption(parser):
@@ -24,9 +25,9 @@ def browser(request):
 
     elif browser_name == "firefox":
         print("\nstart firefox browser for test..")
-        fp = webdriver.FirefoxProfile()
-        fp.set_preference("intl.accept_languages", user_language)
-        browser = webdriver.Firefox(firefox_profile=fp)
+        options = Options()
+        options.set_preference("intl.accept_languages", user_language)
+        browser = webdriver.Firefox(options=options)
     else:
         raise pytest.UsageError("--browser_name should be chrome or firefox")
     yield browser
