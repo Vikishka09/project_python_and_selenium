@@ -9,7 +9,8 @@ class ProductPage(BasePage):
 
     def book_was_added_to_shopping_cart(self):
         book_name = self.browser.find_element(*ProductPageLocators.BOOK_NAME)
-        assert book_name.text == "The shellcoder's handbook", \
+        book_name_on_alert = self.browser.find_element(*ProductPageLocators.BOOK_NAME_ON_ALERT)
+        assert book_name.text == book_name_on_alert.text, \
             f'Another book has been added to the cart {book_name.text}'
 
     def checking_value_of_shopping_cart(self):
