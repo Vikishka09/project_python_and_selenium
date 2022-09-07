@@ -24,3 +24,27 @@ def test_guest_can_add_product_to_basket(browser, link):
     page.solve_quiz_and_get_code()
     page.book_was_added_to_shopping_cart()
     page.checking_value_of_shopping_cart()
+
+
+def test_guest_cant_see_success_message_after_adding_product_to_basket(browser):
+    link = 'http://selenium1py.pythonanywhere.com/ru/catalogue/the-girl-who-played-with-non-fire_203/'
+    page = ProductPage(browser, link)
+    page.open()
+    page.add_to_shopping_cart()
+    page.should_not_be_success_message()
+
+
+def test_guest_cant_see_success_message(browser):
+    link = 'http://selenium1py.pythonanywhere.com/ru/catalogue/google-hacking_197/'
+    page = ProductPage(browser, link)
+    page.open()
+    page.should_not_be_success_message()
+
+
+def test_message_disappeared_after_adding_product_to_basket(browser):
+    link = 'http://selenium1py.pythonanywhere.com/ru/catalogue/silence-on-the-wire_196/'
+    page = ProductPage(browser, link)
+    page.open()
+    page.add_to_shopping_cart()
+    page.should_be_disappeared()
+
