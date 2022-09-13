@@ -1,6 +1,9 @@
 from pages.login_page import LoginPage
+from pages.main_page import MainPage
 from pages.product_page import ProductPage
 import pytest
+import time
+import random
 
 
 links = ["http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0",
@@ -64,4 +67,35 @@ def test_guest_can_go_to_login_page_from_product_page(browser):
     page.go_to_login_page()
     login_page = LoginPage(browser, browser.current_url)
     login_page.should_be_login_page()
+
+
+@pytest.mark.tests_for_authorized_users
+class TestUserAddToBasketFromProductPage:
+    @pytest.fixture(scope="function", autouse=True)
+    def setup(self, browser):
+        link = 'http://selenium1py.pythonanywhere.com'
+        page = MainPage(browser, link)
+        page.open()
+        page.go_to_login_page()
+        login_page = LoginPage(browser, browser.current_url)
+        email = str(time.time()) + "@fakemail.org"
+        password = str(random.randrange(100000000, 1000000000, ))
+        login_page.register_new_user(email, password)
+        page = MainPage(browser, browser.current_url)
+        page.should_be_authorized_user()
+
+    def test_user_cant_see_success_message(self, browser):
+        link = 'http://selenium1py.pythonanywhere.com/ru/catalogue/google-hacking_197/'
+        page = ProductPage(browser, link)
+        page.open()
+        page.should_not_be_success_message()
+
+    def test_user_can_add_product_to_basket(self, browser):
+        link = 'http://selenium1py.pythonanywhere.com/ru/catalogue/hackers_184/'
+        page = ProductPage(browser, link)
+        page.open()
+        page.add_to_shopping_cart()
+        page.book_was_added_to_shopping_cart()
+        page.checking_value_of_shopping_cart()
+
 
